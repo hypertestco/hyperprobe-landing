@@ -15,15 +15,16 @@ export const prerender = true;
 
   :root {
     --bg: #0A0A0A;
-    --surface: #111111;
-    --surface-2: #161616;
-    --border: #242424;
-    --text: #F0EBE3;
-    --muted: #9A8E84;
+    --surface: #151515;
+    --surface-2: #1C1B19;
+    --border: #39342F;
+    --text: #F5F0E8;
+    --muted: #B8AEA5;
+    --subtle: #968C84;
     --coral: #E8683A;
     --coral-dim: #C4521F;
-    --green: #2D7A4A;
-    --red: #B04040;
+    --green: #58B77C;
+    --red: #D46B6B;
     --mono: 'JetBrains Mono', monospace;
     --serif: 'DM Serif Display', serif;
     --sans: 'Inter', sans-serif;
@@ -76,7 +77,7 @@ export const prerender = true;
 
   .nav-links a {
     font-size: 13px;
-    color: #6B6560;
+    color: var(--subtle);
     text-decoration: none;
     transition: color 0.2s;
   }
@@ -88,7 +89,7 @@ export const prerender = true;
     align-items: center;
     gap: 7px;
     font-size: 11px;
-    color: #6B6560;
+    color: var(--subtle);
     font-weight: 500;
     letter-spacing: 0.05em;
   }
@@ -104,7 +105,7 @@ export const prerender = true;
   }
 
   .nav-cta {
-    background: #161616;
+    background: var(--text);
     color: #0A0A0A;
     border: none;
     padding: 9px 20px;
@@ -121,7 +122,7 @@ export const prerender = true;
   .nav-cta:hover { background: #F5F0E8; }
 
   .nav-book {
-    color: #9A8E84;
+    color: var(--muted);
     font-size: 13px;
     font-weight: 500;
     text-decoration: none;
@@ -171,7 +172,7 @@ export const prerender = true;
     font-family: var(--mono);
     font-size: 11px;
     letter-spacing: 0.12em;
-    color: #6B6560;
+    color: var(--subtle);
     text-transform: uppercase;
     margin-bottom: 32px;
     position: relative;
@@ -217,7 +218,7 @@ export const prerender = true;
     font-size: 12px;
   }
 
-  .alert-text .alert-time { color: #6B6358; }
+  .alert-text .alert-time { color: var(--subtle); }
   .alert-text .alert-service { color: #F5F0E8; font-weight: 500; }
   .alert-text .alert-count { color: #E03B3B; font-weight: 500; }
 
@@ -250,7 +251,7 @@ export const prerender = true;
 
   .hero-sub {
     font-size: clamp(15px, 1.7vw, 18px);
-    color: #9A9490;
+    color: var(--muted);
     max-width: 540px;
     line-height: 1.72;
     margin-bottom: 40px;
@@ -307,7 +308,7 @@ export const prerender = true;
 
   .hero-stack {
     font-size: 12px;
-    color: #807870;
+    color: var(--subtle);
     font-family: var(--mono);
     letter-spacing: 0.03em;
     position: relative;
@@ -363,7 +364,7 @@ export const prerender = true;
   }
 
   .fear-card {
-    background: #111111;
+    background: var(--surface);
     padding: 36px 30px;
   }
 
@@ -419,7 +420,7 @@ export const prerender = true;
   }
 
   .probe-callout {
-    background: #111111;
+    background: var(--surface);
     border: 1px solid var(--border);
     border-left: 3px solid var(--coral);
     border-radius: 4px;
@@ -530,7 +531,7 @@ export const prerender = true;
 
   .step.active .step-label { color: var(--coral); }
 
-  .step-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
+  .step-desc { font-size: 13px; color: var(--muted); line-height: 1.55; }
 
   .steps-note {
     font-size: 13px;
@@ -552,7 +553,7 @@ export const prerender = true;
   }
 
   .security-item {
-    background: #111111;
+    background: var(--surface);
     padding: 24px 26px;
   }
 
@@ -598,7 +599,7 @@ export const prerender = true;
 
   .inc-time {
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: 13px;
     color: var(--muted);
     padding-top: 2px;
     line-height: 1.5;
@@ -628,16 +629,16 @@ export const prerender = true;
     margin-bottom: 12px;
   }
 
-  .t-dim { color: #6B6358; }
+  .t-dim { color: var(--subtle); }
   .t-red { color: #D46B6B; }
   .t-coral { color: #E87A4A; }
   .t-green { color: #4DAA75; }
   .t-white { color: #F5F0E8; }
   .t-label {
-    font-size: 10px;
+    font-size: 11px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #4A4540;
+    color: var(--subtle);
     margin-bottom: 8px;
     display: block;
     border-bottom: 1px solid #2C2620;
@@ -668,7 +669,7 @@ export const prerender = true;
   }
 
   .rca-num {
-    background: #111111;
+    background: var(--surface);
     padding: 20px 14px;
     text-align: center;
   }
@@ -682,7 +683,7 @@ export const prerender = true;
     margin-bottom: 5px;
   }
 
-  .rca-num .lbl { font-size: 11px; color: var(--muted); font-family: var(--mono); }
+  .rca-num .lbl { font-size: 12px; color: var(--muted); font-family: var(--mono); }
 
   /* BEFORE AFTER */
   .before-after h2 {
@@ -739,7 +740,7 @@ export const prerender = true;
 
   .ba-row:last-child { border-bottom: none; }
 
-  .ba-t { font-family: var(--mono); font-size: 11px; color: var(--muted); padding-top: 1px; }
+  .ba-t { font-family: var(--mono); font-size: 12px; color: var(--muted); padding-top: 1px; }
 
   .ba-txt { font-size: 13px; color: var(--text); line-height: 1.5; }
   .ba-txt.muted { color: var(--muted); }
@@ -748,7 +749,7 @@ export const prerender = true;
 
   /* FOR YOU IF */
   .for-you {
-    background: #111111;
+    background: var(--surface);
     border-top: 1px solid var(--border);
     padding: 88px 48px;
   }
@@ -820,7 +821,7 @@ export const prerender = true;
   }
 
   .coverage-item {
-    background: #111111;
+    background: var(--surface);
     padding: 24px 22px;
   }
 
@@ -832,7 +833,7 @@ export const prerender = true;
     color: var(--muted);
     font-family: var(--mono);
     padding: 12px 16px;
-    background: #111111;
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 4px;
     display: inline-block;
@@ -854,7 +855,7 @@ export const prerender = true;
   }
 
   .metric-item {
-    background: #111111;
+    background: var(--surface);
     padding: 28px 24px;
     text-align: center;
     display: flex;
@@ -868,7 +869,8 @@ export const prerender = true;
     font-size: 22px;
     color: var(--muted);
     text-decoration: line-through;
-    text-decoration-color: var(--border);
+    text-decoration-color: rgba(232, 104, 58, 0.65);
+    text-decoration-thickness: 2px;
   }
 
   .metric-val.after {
@@ -879,11 +881,11 @@ export const prerender = true;
 
   .metric-arrow {
     font-size: 14px;
-    color: var(--border);
+    color: var(--subtle);
   }
 
   .metric-label {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--muted);
     font-family: var(--mono);
     margin-top: 4px;
@@ -901,7 +903,7 @@ export const prerender = true;
   }
 
   .testimonial-card {
-    background: #111111;
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 28px;
@@ -922,7 +924,7 @@ export const prerender = true;
   }
 
   .testimonial-role {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--muted);
     font-family: var(--mono);
   }
@@ -956,7 +958,7 @@ export const prerender = true;
   }
 
   .pricing-col {
-    background: #111111;
+    background: var(--surface);
     padding: 32px 28px;
     display: flex;
     flex-direction: column;
@@ -1001,7 +1003,7 @@ export const prerender = true;
   }
 
   .pricing-col-note {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--muted);
     font-family: var(--mono);
     margin-top: -4px;
@@ -1038,7 +1040,7 @@ export const prerender = true;
   }
 
   .pricing-install-prompt {
-    background: #1E1E1E;
+    background: var(--surface-2);
     border: 1px solid var(--border);
     border-radius: 4px;
     padding: 14px 16px;
@@ -1050,7 +1052,7 @@ export const prerender = true;
 
   .pricing-install-label {
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: 11px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--muted);
@@ -1066,7 +1068,7 @@ export const prerender = true;
   }
 
   .pricing-install-link {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--coral);
     text-decoration: none;
   }
@@ -1147,7 +1149,7 @@ export const prerender = true;
   .cta-form { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
 
   .cta-form input {
-    background: #161616;
+    background: var(--surface-2);
     border: 1px solid var(--border);
     border-radius: 4px;
     padding: 12px 16px;
@@ -1639,7 +1641,7 @@ export const prerender = true;
     <a href="https://calendly.com/shailendra-hyperprobe/30min" class="btn-secondary">Book a demo</a>
   </div>
 
-  <p class="cta-fine">Node.js · TypeScript · Java · Scala · Kotlin &nbsp;·&nbsp; Runs in your own infra &nbsp;·&nbsp; Up in 15 minutes</p>
+  <p class="cta-fine">Node.js · TypeScript · Java · Kotlin &nbsp;·&nbsp; Runs in your own infra &nbsp;·&nbsp; Up in 15 minutes</p>
 </section>
 
 <!-- FOOTER -->
