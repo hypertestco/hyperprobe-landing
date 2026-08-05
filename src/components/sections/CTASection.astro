@@ -1,0 +1,46 @@
+---
+// src/components/sections/CTASection.astro
+import Button from '@components/ui/Button.astro';
+---
+
+<section class="relative z-10 bg-white">
+  <div class="max-w-[1380px] mx-auto px-6 py-16 md:px-16 md:py-[100px]">
+    
+    <!-- CTA Card Container (Matches screenshot) -->
+    <div class="relative bg-zinc-50/70 rounded-none p-8 md:p-14 text-center overflow-hidden shadow-sm border border-zinc-200">
+      
+      <!-- Subtle internal glow elements -->
+      <div class="absolute -top-1/2 -left-1/2 w-full h-full rounded-none bg-brand-primary/[0.01] blur-[120px] pointer-events-none"></div>
+      
+      <div class="relative z-10 max-w-3xl mx-auto space-y-10">
+        
+        <h2 class="section-heading text-center mx-auto text-3xl sm:text-4xl md:text-5xl! leading-[1.2]! tracking-tight space-y-3">
+          <span class="block">Your next production bug is coming.</span>
+          <span class="block font-sans text-lg sm:text-xl md:text-2xl font-light text-zinc-500 tracking-normal uppercase my-2">— Does your team have —</span>
+          <span class="block accent">9 minutes or 4 hours?</span>
+        </h2>
+        
+        <div class="space-y-4">
+          <p class="body-text text-center mx-auto max-w-2xl">
+            Drop HyperProbe into your staging environment in 10 minutes. Let your coding agent solve a real bug today.
+          </p>
+          <p class="text-zinc-500 italic text-xs sm:text-sm font-light text-center">
+            No change-board approval. No production risk. No commitment.
+          </p>
+        </div>
+
+        <div class="pt-6 flex flex-col items-center justify-center gap-4">
+          <Button href="https://docs.hyperprobe.co/quickstart" variant="primary" size="lg" class="w-full sm:w-auto font-bold px-8 font-sans">
+            TRY IN STAGING &rarr;
+          </Button>
+          <p class="trust-line mt-3 text-zinc-500 font-sans text-xs select-none">
+            Works with Cursor, Claude Code, Codex &nbsp;&middot;&nbsp; Node.js · TypeScript · Java &nbsp;&middot;&nbsp; Early Access &mdash; Free to Start
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>

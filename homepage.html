@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HyperProbe — Your 24/7 AI On-Call Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0A0A0A;
+    --surface: #111111;
+    --surface-2: #161616;
+    --border: #242424;
+    --text: #F0EBE3;
+    --muted: #9A8E84;
+    --coral: #E8683A;
+    --coral-dim: #C4521F;
+    --green: #2D7A4A;
+    --red: #B04040;
+    --mono: 'JetBrains Mono', monospace;
+    --serif: 'DM Serif Display', serif;
+    --sans: 'Inter', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV — dark for hero */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .nav-logo {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    color: #F0EBE3;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-logo span { color: #F0EBE3; }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+    color: #6B6560;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: #F5F0E8; }
+
+  .yc-badge {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    color: #6B6560;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  .yc-mark {
+    background: #E8601C;
+    color: white;
+    font-weight: 700;
+    font-size: 11px;
+    width: 20px; height: 20px;
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .nav-cta {
+    background: #161616;
+    color: #0A0A0A;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--sans);
+    transition: background 0.2s;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+  }
+
+  .nav-cta:hover { background: #F5F0E8; }
+
+  .nav-book {
+    color: #9A8E84;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s;
+    font-family: var(--sans);
+  }
+
+  .nav-book:hover { color: #F0EBE3; }
+
+  /* HERO — dark */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 48px 100px;
+    text-align: center;
+    position: relative;
+    background: #0A0A0A;
+    overflow: hidden;
+  }
+
+  /* Radiating lines from bottom center */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-conic-gradient(
+        from 180deg at 50% 110%,
+        transparent 0deg,
+        transparent 5.5deg,
+        rgba(196,98,45,0.18) 6deg,
+        transparent 6.5deg
+      );
+    pointer-events: none;
+  }
+
+  /* No fade needed — next section is also dark */
+  .hero::after { display: none; }
+
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: #6B6560;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-eyebrow .yc-mark { width: 18px; height: 18px; font-size: 10px; }
+
+  /* ALERT WIDGET */
+  .hero-alert {
+    background: #141414;
+    border: 1px solid #2C2620;
+    border-radius: 8px;
+    padding: 14px 20px;
+    margin-bottom: 44px;
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    font-family: var(--mono);
+    font-size: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+    position: relative;
+    z-index: 1;
+  }
+
+  .alert-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #E03B3B;
+    flex-shrink: 0;
+    animation: pulse 1.4s ease-in-out infinite;
+    box-shadow: 0 0 0 0 rgba(224,59,59,0.4);
+  }
+
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(224,59,59,0.5); }
+    70% { box-shadow: 0 0 0 8px rgba(224,59,59,0); }
+    100% { box-shadow: 0 0 0 0 rgba(224,59,59,0); }
+  }
+
+  .alert-text {
+    color: #C8C0B4;
+    font-size: 12px;
+  }
+
+  .alert-text .alert-time { color: #6B6358; }
+  .alert-text .alert-service { color: #F5F0E8; font-weight: 500; }
+  .alert-text .alert-count { color: #E03B3B; font-weight: 500; }
+
+  .alert-badge {
+    background: rgba(224,59,59,0.15);
+    color: #E03B3B;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    padding: 3px 8px;
+    border-radius: 3px;
+    border: 1px solid rgba(224,59,59,0.3);
+    flex-shrink: 0;
+  }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(40px, 5.5vw, 74px);
+    font-weight: 400;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    max-width: 860px;
+    margin-bottom: 24px;
+    color: #F5F0E8;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero h1 em { font-style: italic; color: var(--coral); }
+
+  .hero-sub {
+    font-size: clamp(15px, 1.7vw, 18px);
+    color: #9A9490;
+    max-width: 540px;
+    line-height: 1.72;
+    margin-bottom: 40px;
+    font-weight: 400;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn-primary {
+    background: var(--coral);
+    color: white;
+    border: none;
+    padding: 13px 26px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--sans);
+    transition: background 0.2s;
+    text-decoration: none;
+    display: inline-block;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-primary:hover { background: var(--coral-dim); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: var(--sans);
+    transition: border-color 0.2s, color 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-secondary:hover { border-color: var(--coral); color: var(--coral); }
+
+  .hero-stack {
+    font-size: 12px;
+    color: #807870;
+    font-family: var(--mono);
+    letter-spacing: 0.03em;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 60px;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 88px 48px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-divider { border-top: 1px solid var(--border); }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--coral);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  /* FEARS */
+  .fears-wrap {
+    padding: 0 48px 88px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .fears-header { margin-bottom: 36px; }
+
+  .fears-header h2 {
+    font-family: var(--serif);
+    font-size: clamp(24px, 3vw, 38px);
+    font-weight: 400;
+    margin-bottom: 6px;
+  }
+
+  .fears-header p { font-size: 15px; color: var(--muted); }
+
+  .fears-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .fear-card {
+    background: #111111;
+    padding: 36px 30px;
+  }
+
+  .fear-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--coral);
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .fear-card h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.25;
+    margin-bottom: 12px;
+  }
+
+  .fear-card p { font-size: 14px; color: var(--muted); line-height: 1.75; }
+  .fear-card p strong { color: var(--text); font-weight: 500; }
+
+  .fear-consequence {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--red);
+    font-style: italic;
+  }
+
+  /* WHAT IT IS */
+  .what-it-is { text-align: center; }
+
+  .what-it-is h2 {
+    font-family: var(--serif);
+    font-size: clamp(26px, 3.8vw, 48px);
+    font-weight: 400;
+    line-height: 1.18;
+    max-width: 880px;
+    margin: 0 auto 20px;
+  }
+
+  .what-it-is h2 em { font-style: italic; color: var(--coral); }
+
+  .what-it-is p {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 520px;
+    margin: 0 auto 32px;
+    line-height: 1.72;
+  }
+
+  .probe-callout {
+    background: #111111;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--coral);
+    border-radius: 4px;
+    padding: 18px 22px;
+    max-width: 580px;
+    margin: 0 auto 32px;
+    text-align: left;
+  }
+
+  .probe-callout-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .probe-callout p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: 0;
+    max-width: none;
+  }
+
+  .probe-callout p strong { color: var(--text); }
+
+  .what-it-is-differentiator {
+    font-size: 15px;
+    color: var(--coral);
+    max-width: 520px;
+    margin: 0 auto;
+    font-style: italic;
+    text-align: center;
+  }
+
+  .what-it-is-ctas {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* HOW IT WORKS */
+  .how-it-works h2 {
+    font-family: var(--serif);
+    font-size: clamp(24px, 3.2vw, 40px);
+    font-weight: 400;
+    margin-bottom: 48px;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    position: relative;
+    margin-bottom: 44px;
+    gap: 0;
+  }
+
+  .steps::before {
+    content: '';
+    position: absolute;
+    top: 24px; left: 10%; right: 10%;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 12px;
+    position: relative;
+  }
+
+  .step-num {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .step.active .step-num {
+    background: var(--coral);
+    border-color: var(--coral);
+    color: white;
+    font-weight: 600;
+  }
+
+  .step-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .step.active .step-label { color: var(--coral); }
+
+  .step-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+  .steps-note {
+    font-size: 13px;
+    color: var(--muted);
+    border-left: 2px solid var(--coral);
+    padding-left: 16px;
+    max-width: 460px;
+    margin-bottom: 44px;
+  }
+
+  .security-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .security-item {
+    background: #111111;
+    padding: 24px 26px;
+  }
+
+  .security-item h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .security-item h4::before { content: '✓'; color: var(--coral); }
+
+  .security-item p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* INCIDENT TIMELINE (condensed) */
+  .incident h2 {
+    font-family: var(--serif);
+    font-size: clamp(24px, 3.2vw, 40px);
+    font-weight: 400;
+    margin-bottom: 8px;
+  }
+
+  .incident-sub {
+    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 48px;
+    max-width: 480px;
+  }
+
+  .inc-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 32px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+
+  .inc-row:first-child { border-top: 1px solid var(--border); }
+
+  .inc-time {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    padding-top: 2px;
+    line-height: 1.5;
+  }
+
+  .inc-time .inc-timestamp { display: block; color: var(--text); font-weight: 500; }
+
+  .inc-body h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .inc-body p { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 12px; max-width: 580px; }
+  .inc-body p strong { color: var(--text); font-weight: 500; }
+
+  .terminal {
+    background: #1C1814;
+    border: 1px solid #2C2620;
+    border-radius: 6px;
+    padding: 16px 20px;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.8;
+    max-width: 560px;
+    margin-bottom: 12px;
+  }
+
+  .t-dim { color: #6B6358; }
+  .t-red { color: #D46B6B; }
+  .t-coral { color: #E87A4A; }
+  .t-green { color: #4DAA75; }
+  .t-white { color: #F5F0E8; }
+  .t-label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #4A4540;
+    margin-bottom: 8px;
+    display: block;
+    border-bottom: 1px solid #2C2620;
+    padding-bottom: 6px;
+  }
+
+  .inc-note {
+    font-size: 13px;
+    color: var(--muted);
+    border-left: 2px solid var(--border);
+    padding-left: 12px;
+    font-style: italic;
+    max-width: 480px;
+  }
+
+  .inc-note.coral { border-left-color: var(--coral); color: var(--text); font-style: normal; }
+
+  .rca-nums {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    max-width: 500px;
+    margin-top: 16px;
+  }
+
+  .rca-num {
+    background: #111111;
+    padding: 20px 14px;
+    text-align: center;
+  }
+
+  .rca-num .big {
+    font-family: var(--serif);
+    font-size: 28px;
+    color: var(--coral);
+    display: block;
+    line-height: 1;
+    margin-bottom: 5px;
+  }
+
+  .rca-num .lbl { font-size: 11px; color: var(--muted); font-family: var(--mono); }
+
+  /* BEFORE AFTER */
+  .before-after h2 {
+    font-family: var(--serif);
+    font-size: clamp(24px, 3.2vw, 40px);
+    font-weight: 400;
+    margin-bottom: 8px;
+  }
+
+  .ba-sub { color: var(--muted); font-size: 15px; margin-bottom: 40px; max-width: 480px; }
+
+  .ba-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .ba-col { background: var(--surface); padding: 32px; }
+
+  .ba-col-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ba-col-label.before { color: var(--red); }
+  .ba-col-label.after { color: var(--green); }
+
+  .ba-col-label::before {
+    content: '';
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .ba-rows { display: flex; flex-direction: column; gap: 0; }
+
+  .ba-row {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ba-row:last-child { border-bottom: none; }
+
+  .ba-t { font-family: var(--mono); font-size: 11px; color: var(--muted); padding-top: 1px; }
+
+  .ba-txt { font-size: 13px; color: var(--text); line-height: 1.5; }
+  .ba-txt.muted { color: var(--muted); }
+  .ba-txt.bad { color: var(--red); }
+  .ba-txt.good { color: var(--green); font-weight: 500; }
+
+  /* FOR YOU IF */
+  .for-you {
+    background: #111111;
+    border-top: 1px solid var(--border);
+    padding: 88px 48px;
+  }
+
+  .for-you-inner { max-width: 1100px; margin: 0 auto; }
+
+  .for-you-inner h2 {
+    font-family: var(--serif);
+    font-size: clamp(24px, 3.2vw, 40px);
+    font-weight: 400;
+    margin-bottom: 6px;
+  }
+
+  .for-you-sub { color: var(--muted); font-size: 15px; margin-bottom: 44px; }
+
+  .for-you-opener {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--coral);
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin-bottom: 36px;
+    max-width: 740px;
+  }
+
+  .for-you-opener p {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  .for-you-opener p strong { font-style: normal; color: var(--coral); }
+
+  .for-you-list { display: flex; flex-direction: column; border-top: 1px solid var(--border); }
+
+  .for-you-item {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 48px;
+    padding: 30px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .for-you-item h3 { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.45; }
+
+  .for-you-item p { font-size: 14px; color: var(--muted); line-height: 1.75; }
+  .for-you-item p strong { color: var(--text); font-weight: 500; }
+
+  /* COVERAGE */
+  .coverage h2 {
+    font-family: var(--serif);
+    font-size: clamp(22px, 2.8vw, 36px);
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+
+  .coverage-sub { color: var(--muted); font-size: 15px; margin-bottom: 36px; max-width: 520px; }
+
+  .coverage-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .coverage-item {
+    background: #111111;
+    padding: 24px 22px;
+  }
+
+  .coverage-item h4 { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .coverage-item p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  .coverage-coming {
+    font-size: 13px;
+    color: var(--muted);
+    font-family: var(--mono);
+    padding: 12px 16px;
+    background: #111111;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  .coverage-coming span { color: var(--coral); }
+
+  /* METRICS ROW */
+  .metrics-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 36px auto;
+    max-width: 780px;
+  }
+
+  .metric-item {
+    background: #111111;
+    padding: 28px 24px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .metric-val {
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--border);
+  }
+
+  .metric-val.after {
+    font-size: 28px;
+    color: var(--coral);
+    text-decoration: none;
+  }
+
+  .metric-arrow {
+    font-size: 14px;
+    color: var(--border);
+  }
+
+  .metric-label {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-top: 4px;
+  }
+
+  /* TESTIMONIALS */
+  .testimonials-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 36px;
+    max-width: 780px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .testimonial-card {
+    background: #111111;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px;
+  }
+
+  .testimonial-quote {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.75;
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+
+  .testimonial-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .testimonial-role {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  /* PRICING STRIP */
+  .pricing-strip { border-top: 1px solid var(--border); }
+
+  .pricing-strip h2 {
+    font-family: var(--serif);
+    font-size: clamp(24px, 3.2vw, 40px);
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+
+  .pricing-strip-lede {
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 48px;
+    max-width: 520px;
+  }
+
+  .pricing-cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+
+  .pricing-col {
+    background: #111111;
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .pricing-col-featured {
+    background: var(--bg);
+    border-left: 2px solid var(--coral);
+    border-right: 2px solid var(--coral);
+    position: relative;
+  }
+
+  .pricing-col-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 4px;
+  }
+
+  .pricing-col-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.02em;
+  }
+
+  .pricing-col-price {
+    font-family: var(--serif);
+    font-size: 36px;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .price-qualifier {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .pricing-col-note {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-top: -4px;
+  }
+
+  .pricing-col-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  .pricing-col-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    flex: 1;
+  }
+
+  .pricing-col-bullets li {
+    font-size: 13px;
+    color: var(--text);
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .pricing-col-bullets li::before {
+    content: '·';
+    color: var(--coral);
+    font-size: 18px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .pricing-install-prompt {
+    background: #1E1E1E;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .pricing-install-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .pricing-install-code {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .pricing-install-link {
+    font-size: 12px;
+    color: var(--coral);
+    text-decoration: none;
+  }
+
+  .pricing-install-link:hover { text-decoration: underline; }
+
+  .pricing-trust {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--mono);
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  .pricing-full-link {
+    display: block;
+    text-align: center;
+    font-size: 14px;
+    color: var(--coral);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .pricing-full-link:hover { text-decoration: underline; }
+
+  /* FAQ */
+  .faq-section h2 {
+    font-family: var(--serif);
+    font-size: clamp(24px, 3.2vw, 40px);
+    font-weight: 400;
+    margin-bottom: 48px;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--border);
+  }
+
+  .faq-item {
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .faq-item h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .faq-item p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+  /* CTA */
+  .cta-section { text-align: center; }
+
+  .cta-section h2 {
+    font-family: var(--serif);
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 400;
+    line-height: 1.12;
+    max-width: 660px;
+    margin: 0 auto 16px;
+  }
+
+  .cta-section h2 em { font-style: italic; color: var(--coral); }
+
+  .cta-sub { color: var(--muted); font-size: 16px; margin-bottom: 40px; max-width: 440px; margin-left: auto; margin-right: auto; }
+
+  .cta-form { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
+
+  .cta-form input {
+    background: #161616;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #F0EBE3;
+    font-family: var(--sans);
+    width: 200px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .cta-form input:focus { border-color: var(--coral); }
+  .cta-form input::placeholder { color: var(--muted); }
+
+  .cta-fine { font-size: 12px; color: var(--muted); font-family: var(--mono); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  footer p { font-size: 12px; color: var(--muted); }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 800px) {
+    nav { padding: 14px 20px; }
+    .nav-links { display: none; }
+    section { padding: 60px 20px; }
+    .fears-wrap { padding: 0 20px 60px; }
+    .fears-grid { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr 1fr; gap: 20px; }
+    .steps::before { display: none; }
+    .security-row { grid-template-columns: 1fr; }
+    .inc-row { grid-template-columns: 1fr; gap: 12px; }
+    .ba-grid { grid-template-columns: 1fr; }
+    .for-you { padding: 60px 20px; }
+    .for-you-item { grid-template-columns: 1fr; gap: 8px; }
+    .coverage-grid { grid-template-columns: 1fr; }
+    .rca-nums { grid-template-columns: repeat(2, 1fr); }
+    footer { flex-direction: column; gap: 10px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">
+    <svg width="22" height="22" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:8px;vertical-align:middle;">
+      <polygon points="20,65 38,20 52,20 34,65" fill="white"/>
+      <polygon points="48,80 66,35 80,35 62,80" fill="white"/>
+      <polygon points="20,65 38,65 48,80 30,80" fill="white" opacity="0.6"/>
+    </svg>HyperProbe
+  </a>
+  <div class="nav-links">
+    <a href="#how">Product</a>
+    <a href="/pricing">Pricing</a>
+    <a href="https://docs.hyperprobe.co">Docs</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <a href="https://calendly.com/shailendra-hyperprobe/30min" class="nav-book">Book a Demo</a>
+    <a href="https://docs.hyperprobe.co/quickstart" class="nav-cta">Try Now →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">
+    <div class="yc-mark">Y</div>
+    Backed by Y Combinator &nbsp;·&nbsp; AI ON-CALL AGENT
+  </div>
+
+  <div class="hero-alert">
+    <div class="alert-dot"></div>
+    <div class="alert-text">
+      <span class="alert-time">02:47 AM &nbsp;·&nbsp; </span>
+      <span class="alert-service">order-service</span>
+      <span class="alert-time"> &nbsp;·&nbsp; </span>
+      <span class="alert-count">847 failures / 10 min</span>
+      <span class="alert-time"> &nbsp;·&nbsp; @priya paged</span>
+    </div>
+    <div class="alert-badge">TRIGGERED</div>
+  </div>
+
+  <h1>Your engineers<br>didn't join to be<br><em>on call.</em></h1>
+
+  <p class="hero-sub">Every hour they spend in a war room is an hour they're not building. HyperProbe works the incident for them, alert to confirmed root cause before they've opened their laptop.</p>
+
+  <div class="hero-ctas">
+    <a href="https://docs.hyperprobe.co/quickstart" class="btn-primary">TRY NOW →</a>
+    <a href="https://calendly.com/shailendra-hyperprobe/30min" class="btn-secondary">BOOK A DEMO</a>
+  </div>
+
+  <div class="hero-stack">Node.js · TypeScript · Java · Python &nbsp;·&nbsp; Works with Cursor, Claude Code, Codex, Opencode</div>
+
+
+</div>
+
+<!-- FEARS -->
+<div class="fears-wrap reveal">
+  <div class="fears-header">
+    <span class="eyebrow">The problem</span>
+    <h2>This is what your team is living with.</h2>
+    <p>If any of these sound familiar, keep reading.</p>
+  </div>
+
+  <div class="fears-grid">
+    <div class="fear-card">
+      <span class="fear-num">01</span>
+      <h3>Your best engineers are on-call. Product roadmap slips.</h3>
+      <p>Incidents don't just break production. They break your roadmap. Your best engineers become your on-call team, every hour spent debugging is an hour not building.</p>
+    </div>
+    <div class="fear-card">
+      <span class="fear-num">02</span>
+      <h3>You fixed the incident. You have no idea why.</h3>
+      <p>The hotfix was an educated guess. Nobody confirmed what actually caused it. If the same conditions appear next week, the same incident fires.</p>
+    </div>
+    <div class="fear-card">
+      <span class="fear-num">03</span>
+      <h3>The fix takes 10 minutes. Finding it takes hours.</h3>
+      <p>The incident costs the same every minute it stays open. The fix takes mins. Finding takes hours, because the value that explains failure is never logged.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SOLUTION -->
+<section class="what-it-is section-divider reveal">
+  <span class="eyebrow">The solution</span>
+  <h2>The AI that handles the incident<br>so your engineers don't have to.</h2>
+  <p>HyperProbe makes your coding agents drop a read-only probe on the exact line where the problem happened in prod. It captures data your logs do not have, without redeployment or restarting the service.</p>
+
+  <p class="what-it-is-differentiator">Every other tool reasons hard over data you already have. HyperProbe captures exact evidence.</p>
+
+  <div class="metrics-row">
+    <div class="metric-item">
+      <span class="metric-val">3 to 4 hrs</span>
+      <span class="metric-arrow">→</span>
+      <span class="metric-val after">&lt;10 min</span>
+      <span class="metric-label">Time to root cause</span>
+    </div>
+    <div class="metric-item">
+      <span class="metric-val">3 to 4</span>
+      <span class="metric-arrow">→</span>
+      <span class="metric-val after">0</span>
+      <span class="metric-label">Redeployments per incident</span>
+    </div>
+    <div class="metric-item">
+      <span class="metric-val">2 to 3</span>
+      <span class="metric-arrow">→</span>
+      <span class="metric-val after">0</span>
+      <span class="metric-label">Senior engineers on the investigation</span>
+    </div>
+  </div>
+
+  <div class="testimonials-row">
+    <div class="testimonial-card">
+      <p class="testimonial-quote">"Sync issues used to take us days to reproduce locally. HyperProbe caught the silent data mismatch in production on the first attempt."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-name">Aishwarya Maurya</div>
+        <div class="testimonial-role">Tech Lead, CheQ Digital</div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <p class="testimonial-quote">"During peak traffic, our listing service was black-boxing failures. HyperProbe let us inspect the live memory state during the spike. We fixed the race condition in the same hour."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-name">Bhagwan Bansal</div>
+        <div class="testimonial-role">SDE, Housing.com</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="what-it-is-ctas">
+    <a href="https://docs.hyperprobe.co/quickstart" class="btn-primary">TRY IT NOW →</a>
+    <a href="https://calendly.com/shailendra-hyperprobe/30min" class="btn-secondary">Book a demo</a>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works section-divider reveal" id="how">
+  <span class="eyebrow">How it works</span>
+  <h2>What happens when an incident fires.</h2>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-label">Alert</div>
+      <div class="step-desc">Picks up the page from PagerDuty, Datadog, or Slack automatically.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-label">Plan</div>
+      <div class="step-desc">Reads logs and traces, to automatically locate the file, line with the issue, and plan debugging flow.</div>
+    </div>
+    <div class="step active">
+      <div class="step-num">03</div>
+      <div class="step-label">Probe</div>
+      <div class="step-desc">Logs not enough? Places a read-only virtual breakpoint on the suspect line. No redeploy.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-label">Capture</div>
+      <div class="step-desc">Breakpoint fires on live traffic. Exact variable state captured at that line.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">05</div>
+      <div class="step-label">Confirm</div>
+      <div class="step-desc">Diagnosis verified against real evidence. Confirmed RCA delivered.</div>
+    </div>
+  </div>
+
+  <div class="probe-callout" style="max-width:100%;margin-bottom:32px;">
+    <span class="probe-callout-label">What is a probe?</span>
+    <p>A probe is a <strong>read-only, non-blocking snapshot</strong> of the live variable state at a specific line in your running service. It fires on real traffic, captures the exact values at that moment, and disappears after capture. Your service never pauses. Zero user impact.</p>
+  </div>
+
+  <div class="security-row">
+    <div class="security-item">
+      <h4>Read-only. Always.</h4>
+      <p>The agent captures state. It cannot write memory or execute code. Every probe is logged in an immutable audit trail. Approval-gated until you trust it.</p>
+    </div>
+    <div class="security-item">
+      <h4>Runs inside your infra.</h4>
+      <p>Self-hosted or private VPC. Nothing leaves your environment. PII redacted at the agent before capture. Your security team defines what can be observed.</p>
+    </div>
+    <div class="security-item">
+      <h4>Zero thread pause.</h4>
+      <p>The breakpoint fires asynchronously. Requests complete at full speed. Users experience nothing. Less than 1% overhead at 3,000 RPS.</p>
+    </div>
+  </div>
+</section>
+
+<section class="coverage section-divider reveal">
+  <span class="eyebrow">What we cover</span>
+  <h2>Some failures never page you.</h2>
+  <p class="coverage-sub">No exception. No alert. HyperProbe shines even with problems hardest to find.</p>
+
+  <div class="coverage-grid">
+    <div class="coverage-item">
+      <h4>Silent failures</h4>
+      <p>Returns 200 with the wrong body. The trace is green. The value was never logged.</p>
+    </div>
+    <div class="coverage-item">
+      <h4>Exceptions far from cause</h4>
+      <p>Stack trace names line 82. The cause is at line 18, or in a different file.</p>
+    </div>
+    <div class="coverage-item">
+      <h4>Wrong behaviour, nothing thrown</h4>
+      <p>Exception caught and swallowed. No alert. No error. The business metric just moves.</p>
+    </div>
+    <div class="coverage-item">
+      <h4>Race and duplicate processing</h4>
+      <p>Needs thread state at the exact moment of overlap. Nothing logs that.</p>
+    </div>
+    <div class="coverage-item">
+      <h4>Third-party contract drift</h4>
+      <p>Vendor added a new field or status value. Your parser has no case for it.</p>
+    </div>
+    <div class="coverage-item">
+      <h4>Business metric drops</h4>
+      <p>Payments failing, orders dropping. No exception anywhere in the stack.</p>
+    </div>
+  </div>
+
+  <div class="coverage-coming">
+    <span>Shipping this month:</span> &nbsp;Memory leak diagnosis · OOM root cause · CPU spike isolation · Latency spike tracing
+  </div>
+</section>
+
+<!-- INCIDENT: ONE REAL INCIDENT -->
+<section class="incident section-divider reveal" id="incident">
+  <span class="eyebrow">One real incident, start to finish</span>
+  <h2>Alert to root cause. No war rooms.</h2>
+  <p class="incident-sub">Not a feature walkthrough. This is exactly what happens when HyperProbe works an incident on your behalf.</p>
+
+  <div>
+    <div class="inc-row">
+      <div class="inc-time">
+        <span class="inc-timestamp">02:47 AM</span>
+        Alert fires
+      </div>
+      <div class="inc-body">
+        <h3>High error rate on order status. 23% of requests failing.</h3>
+        <p>PagerDuty fires. GET /api/orders/{id}/status is returning 500 for nearly a quarter of requests. 847 failures in the last 10 minutes. No exception in the logs.</p>
+        <div class="terminal">
+          <span class="t-label">PagerDuty alert</span>
+          <span class="t-red">HIGH ERROR RATE</span> <span class="t-white">· order-service</span><br>
+          <span class="t-dim">GET /api/orders/{id}/status · 500 · 23% error rate</span><br>
+          <span class="t-dim">847 failures / 10 min · threshold exceeded</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="inc-row">
+      <div class="inc-time">
+        <span class="inc-timestamp">02:48 AM</span>
+        Scouting
+      </div>
+      <div class="inc-body">
+        <h3>HyperProbe follows the trace chain. Identifies a silent write failure upstream.</h3>
+        <p>HyperProbe reads the distributed traces and follows the failure chain. Order service is healthy. Payment service downstream is returning 404. Payments exist in the payment gateway but are not in the system.</p>
+        <div class="terminal">
+          <span class="t-label">Trace for failing request</span>
+          <span class="t-white">GET /api/orders/{id}/status</span> <span class="t-red">500</span><br>
+          <span class="t-dim">&nbsp;&nbsp;|</span><br>
+          <span class="t-dim">&nbsp;&nbsp;└──</span> <span class="t-white">GET payment-service/api/getPaymentsByOrder/{orderId}</span> <span class="t-red">404</span>
+        </div>
+        <p class="inc-note">Payments exist in the payment gateway. Not found in the system. A write failed silently somewhere upstream.</p>
+      </div>
+    </div>
+
+    <div class="inc-row">
+      <div class="inc-time">
+        <span class="inc-timestamp">02:49 AM</span>
+        Probe placed
+      </div>
+      <div class="inc-body">
+        <h3>HyperProbe places a virtual breakpoint on the webhook handler.</h3>
+        <p>HyperProbe identifies payments are recorded when the payment gateway calls a webhook. A virtual breakpoint placed on the webhook handler at /src/api/webhooks.ts line 78. No redeploy. Service keeps running.</p>
+        <div class="terminal">
+          <span class="t-label">Probe activated</span>
+          <span class="t-white">POST /api/webhooks/payments</span><br>
+          <span class="t-dim">file: /src/api/webhooks.ts · line 78</span><br>
+          <span class="t-green">Non-blocking · Read-only · No redeploy</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="inc-row">
+      <div class="inc-time">
+        <span class="inc-timestamp">02:50 AM</span>
+        Bug found
+      </div>
+      <div class="inc-body">
+        <h3>Snapshot captures live request at the exact moment the webhook fires.</h3>
+        <p>Gateway is sending PENDING. The code has no case for it. Idempotency check marks payment as processed before confirming state. Payment never written to DB. No exception fires.</p>
+        <div class="terminal">
+          <span class="t-label">Live snapshot · webhooks.ts:78 · captured 02:50:14 UTC</span>
+          <span class="t-dim">status &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="t-white">= <span class="t-coral">"PENDING"</span></span> <span class="t-dim">← payment gateway sending this, no handler exists</span><br>
+          <span class="t-dim">duplicate &nbsp;</span><span class="t-white">= null</span> <span class="t-dim">← first time seen, passes through</span><br>
+          <span class="t-dim">db.insert &nbsp;</span><span class="t-red">→ never called</span><br>
+          <span class="t-dim">redis.set &nbsp;</span><span class="t-red">→ called anyway, payment locked out permanently</span>
+        </div>
+        <p class="inc-note">Payment gateway started sending PENDING, a status your code never handled. Idempotency key written before state is checked. Payment marked processed, never recorded.</p>
+      </div>
+    </div>
+
+    <div class="inc-row">
+      <div class="inc-time">
+        <span class="inc-timestamp">02:52 AM</span>
+        Fix suggested
+      </div>
+      <div class="inc-body">
+        <h3>Root cause confirmed. Fix ready. 5 minutes from alert.</h3>
+        <p class="inc-note">Payment gateway started sending PENDING, a status your code never handled. Idempotency key written before state is checked. Payment marked processed, never recorded.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BEFORE / AFTER -->
+<section class="before-after reveal">
+  <span class="eyebrow">Before and after</span>
+  <h2>The same incident. Two realities.</h2>
+  <p class="ba-sub">Your best engineers should not be your on-call team. HyperProbe handles the investigation so they can go back to building.</p>
+
+  <div class="ba-grid">
+    <div class="ba-col">
+      <div class="ba-col-label before">Without HyperProbe</div>
+      <div class="ba-rows">
+        <div class="ba-row"><div class="ba-t">02:47 AM</div><div class="ba-txt bad">Alert fires. Engineer paged.</div></div>
+        <div class="ba-row"><div class="ba-t">02:50 AM</div><div class="ba-txt muted">Stack trace points to line 82. The variable that caused it was set several frames up, in a different file. No log captures it there.</div></div>
+        <div class="ba-row"><div class="ba-t">03:10 AM</div><div class="ba-txt muted">Frame located. Variable value not visible. Adds a log line to capture it.</div></div>
+        <div class="ba-row"><div class="ba-t">03:40 AM</div><div class="ba-txt muted">CI/CD deploys. 30 minutes gone. Waiting for the condition to reproduce in production.</div></div>
+        <div class="ba-row"><div class="ba-t">04:15 AM</div><div class="ba-txt muted">First log visible. Partial data. Not enough. Another log line. Another 30-minute deploy cycle.</div></div>
+        <div class="ba-row"><div class="ba-t">05:20 AM</div><div class="ba-txt bad">After 2 to 3 redeploy cycles, root cause confirmed. 2 hours 33 minutes.</div></div>
+      </div>
+    </div>
+    <div class="ba-col">
+      <div class="ba-col-label after">With HyperProbe</div>
+      <div class="ba-rows">
+        <div class="ba-row"><div class="ba-t">02:47 AM</div><div class="ba-txt good">Alert fires. HyperProbe picks it up.</div></div>
+        <div class="ba-row"><div class="ba-t">02:48 AM</div><div class="ba-txt muted">HyperProbe uses your coding agent to locate the exact frame where the probe should go. All in background.</div></div>
+        <div class="ba-row"><div class="ba-t">02:49 AM</div><div class="ba-txt muted">HyperProbe activates a virtual breakpoint at that exact line. No redeploy.</div></div>
+        <div class="ba-row"><div class="ba-t">02:53 AM</div><div class="ba-txt muted">Breakpoint fires safely at next request. Exact variable value captured. Service keeps running.</div></div>
+        <div class="ba-row"><div class="ba-t">02:56 AM</div><div class="ba-txt good">Root cause confirmed. 9 minutes from alert to evidence-backed diagnosis.</div></div>
+        <div class="ba-row"><div class="ba-t">03:00 AM</div><div class="ba-txt good">Engineer commits the fix.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- PRICING STRIP -->
+<section class="pricing-strip section-divider reveal">
+  <span class="eyebrow">Pricing</span>
+  <h2>Priced per service. Never per engineer.</h2>
+  <p class="pricing-strip-lede">Probes and captures are unlimited on every plan. You should never hit a wall in the middle of an incident.</p>
+
+  <div class="pricing-cols">
+
+    <div class="pricing-col">
+      <div class="pricing-col-name">Free</div>
+      <div class="pricing-col-price">$0 <span class="price-qualifier">forever</span></div>
+      <div class="pricing-col-note">1 service · managed cloud</div>
+      <p class="pricing-col-desc">Install the SDK and see a real capture the same afternoon.</p>
+      <ul class="pricing-col-bullets">
+        <li>1 service</li>
+        <li>Unlimited probes and captures</li>
+        <li>Installs from a single agent prompt</li>
+      </ul>
+      <div class="pricing-install-prompt">
+        <span class="pricing-install-label">Install with your coding agent</span>
+        <a href="https://docs.hyperprobe.co/sdks/with-ai-agent" class="pricing-install-link">Installation docs →</a>
+      </div>
+    </div>
+
+    <div class="pricing-col pricing-col-featured">
+      <div class="pricing-col-badge">Most teams</div>
+      <div class="pricing-col-name">Professional</div>
+      <div class="pricing-col-price">$99 <span class="price-qualifier">per service per month</span></div>
+      <div class="pricing-col-note">$79 billed annually · 3 service minimum</div>
+      <p class="pricing-col-desc">For teams running real production traffic who want the whole stack instrumented, not one service.</p>
+      <ul class="pricing-col-bullets">
+        <li>Unlimited services</li>
+        <li>30-day capture history</li>
+        <li>Shared workspace and saved probes</li>
+      </ul>
+      <a href="https://docs.hyperprobe.co/quickstart" class="btn-primary" style="display:inline-block;margin-top:auto;">Try Now</a>
+    </div>
+
+    <div class="pricing-col">
+      <div class="pricing-col-name">Enterprise</div>
+      <div class="pricing-col-price">Custom</div>
+      <div class="pricing-col-note">Annual contract · volume pricing</div>
+      <p class="pricing-col-desc">For teams whose security review has to sign off before anything touches production.</p>
+      <ul class="pricing-col-bullets">
+        <li>Self-hosted or private VPC</li>
+        <li>RBAC and approval gates</li>
+        <li>Custom PII redaction rules</li>
+      </ul>
+      <a href="https://calendly.com/shailendra-hyperprobe/30min" class="btn-secondary" style="display:inline-block;margin-top:auto;">Talk to us</a>
+    </div>
+
+  </div>
+
+  <p class="pricing-trust">First incident we work with you is free · Cancel any month · No seat counts · No host counts · No capture limits</p>
+  <a href="/pricing" class="pricing-full-link">See full pricing and what is in each plan →</a>
+</section>
+<!-- FOR YOU IF -->
+<div class="for-you reveal">
+  <div class="for-you-inner">
+    <span class="eyebrow">This is built for you if</span>
+    <h2>You recognise any of these.</h2>
+    <p class="for-you-sub">If you don't, we're probably not the right fit yet. If you do, let's talk.</p>
+
+    <div class="for-you-list">
+      <div class="for-you-item">
+        <h3>When did you last spend 2-3 hours in a war room for something that turned out to be a one-line fix?</h3>
+        <p>If you have a specific memory of that night, HyperProbe is built for you. The data you needed was never in the logs. You grepped, guessed, redeployed, and hoped. It does not have to work that way.</p>
+      </div>
+      <div class="for-you-item">
+        <h3>Your best engineers are your on-call team, not your product team.</h3>
+        <p>When prod breaks, your most expensive hire gets paged to do work a machine should do. Every night on-call is a night they resent. And your best people have options.</p>
+      </div>
+      <div class="for-you-item">
+        <h3>The same incident will happen again. Because nothing confirmed why it happened the first time.</h3>
+        <p>Without the exact variable state at the moment of failure, every fix is a guess. Guesses hold until they don't. HyperProbe confirms root cause so the fix is final, not deferred.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section section-divider reveal" id="cta">
+  <span class="eyebrow">Start the POC</span>
+  <h2>Let us work one <em>real incident</em><br>from your stack.</h2>
+  <p class="cta-sub">30 minutes. Your service. Your incident. You'll see a confirmed root cause before the call ends — or there's nothing more to discuss.</p>
+
+  <div class="cta-form">
+    <a href="https://docs.hyperprobe.co/quickstart" class="btn-primary">Try Now →</a>
+    <a href="https://calendly.com/shailendra-hyperprobe/30min" class="btn-secondary">Book a demo</a>
+  </div>
+
+  <p class="cta-fine">Node.js · TypeScript · Java · Scala · Kotlin &nbsp;·&nbsp; Runs in your own infra &nbsp;·&nbsp; Up in 15 minutes</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="nav-logo" style="text-decoration:none;">Hyper<span>Probe</span></a>
+  <p>© 2026 HyperProbe · YC S26 · hyperprobe.co</p>
+  <div class="yc-badge"><div class="yc-mark">Y</div> Backed by Y Combinator</div>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.05 });
+  reveals.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
