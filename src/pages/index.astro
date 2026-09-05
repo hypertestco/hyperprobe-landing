@@ -6,7 +6,7 @@ export const prerender = true;
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HyperProbe — Your 24/7 AI On-Call Agent</title>
+<title>HyperProbe — Debug Production Without Redeploying</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="alternate icon" href="/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -256,8 +256,18 @@ export const prerender = true;
     color: var(--muted);
     max-width: 540px;
     line-height: 1.72;
-    margin-bottom: 40px;
+    margin-bottom: 14px;
     font-weight: 400;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-proof {
+    color: var(--coral);
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    margin-bottom: 32px;
     position: relative;
     z-index: 1;
   }
@@ -1219,8 +1229,8 @@ export const prerender = true;
     <a href="https://docs.hyperprobe.co">Docs</a>
   </div>
   <div style="display:flex;align-items:center;gap:16px;">
-    <a href="https://calendly.com/shailendra-hyperprobe/30min" class="nav-book">Book a Demo</a>
-    <a href="https://docs.hyperprobe.co/quickstart" class="nav-cta">Try Now →</a>
+    <a href="https://calendly.com/shailendra-hyperprobe/30min" class="nav-book">BOOK A DEMO</a>
+    <a href="https://docs.hyperprobe.co/quickstart" class="nav-cta">TRY NOW</a>
   </div>
 </nav>
 
@@ -1228,7 +1238,7 @@ export const prerender = true;
 <div class="hero">
   <div class="hero-eyebrow">
     <div class="yc-mark">Y</div>
-    Backed by Y Combinator &nbsp;·&nbsp; AI ON-CALL AGENT
+    Backed by Y Combinator &nbsp;·&nbsp; AI NATIVE PRODUCTION DEBUGGER
   </div>
 
   <div class="hero-alert">
@@ -1243,12 +1253,14 @@ export const prerender = true;
     <div class="alert-badge">TRIGGERED</div>
   </div>
 
-  <h1>Your engineers<br>didn't join to be<br><em>on call.</em></h1>
+  <h1>Kill the <em>log, redeploy,<br>wait</em> cycle.</h1>
 
-  <p class="hero-sub">Every hour they spend in a war room is an hour they're not building. HyperProbe works the incident for them, alert to confirmed root cause before they've opened their laptop.</p>
+  <p class="hero-sub">No more adding logs, redeploying, and waiting hours for one missing value. HyperProbe reads the live state logs never capture, straight from running code.</p>
+
+  <p class="hero-proof">No code change. No restart.</p>
 
   <div class="hero-ctas">
-    <a href="https://docs.hyperprobe.co/quickstart" class="btn-primary">TRY NOW →</a>
+    <a href="https://docs.hyperprobe.co/quickstart" class="btn-primary">TRY NOW</a>
     <a href="https://calendly.com/shailendra-hyperprobe/30min" class="btn-secondary">BOOK A DEMO</a>
   </div>
 
@@ -1331,8 +1343,8 @@ export const prerender = true;
   </div>
 
   <div class="what-it-is-ctas">
-    <a href="https://docs.hyperprobe.co/quickstart" class="btn-primary">TRY IT NOW →</a>
-    <a href="https://calendly.com/shailendra-hyperprobe/30min" class="btn-secondary">Book a demo</a>
+    <a href="https://docs.hyperprobe.co/quickstart" class="btn-primary">TRY NOW</a>
+    <a href="https://calendly.com/shailendra-hyperprobe/30min" class="btn-secondary">BOOK A DEMO</a>
   </div>
 </section>
 
@@ -1586,7 +1598,7 @@ export const prerender = true;
         <li>30-day capture history</li>
         <li>Shared workspace and saved probes</li>
       </ul>
-      <a href="https://docs.hyperprobe.co/quickstart" class="btn-primary" style="display:inline-block;margin-top:auto;">Try Now</a>
+      <a href="https://docs.hyperprobe.co/quickstart" class="btn-primary" style="display:inline-block;margin-top:auto;">TRY NOW</a>
     </div>
 
     <div class="pricing-col">
@@ -1599,7 +1611,7 @@ export const prerender = true;
         <li>RBAC and approval gates</li>
         <li>Custom PII redaction rules</li>
       </ul>
-      <a href="https://calendly.com/shailendra-hyperprobe/30min" class="btn-secondary" style="display:inline-block;margin-top:auto;">Talk to us</a>
+      <a href="https://calendly.com/shailendra-hyperprobe/30min" class="btn-secondary" style="display:inline-block;margin-top:auto;">BOOK A DEMO</a>
     </div>
 
   </div>
@@ -1638,8 +1650,8 @@ export const prerender = true;
   <p class="cta-sub">30 minutes. Your service. Your incident. You'll see a confirmed root cause before the call ends — or there's nothing more to discuss.</p>
 
   <div class="cta-form">
-    <a href="https://docs.hyperprobe.co/quickstart" class="btn-primary">Try Now →</a>
-    <a href="https://calendly.com/shailendra-hyperprobe/30min" class="btn-secondary">Book a demo</a>
+    <a href="https://docs.hyperprobe.co/quickstart" class="btn-primary">TRY NOW</a>
+    <a href="https://calendly.com/shailendra-hyperprobe/30min" class="btn-secondary">BOOK A DEMO</a>
   </div>
 
   <p class="cta-fine">JavaScript · TypeScript · Java · Python · Ruby &nbsp;·&nbsp; Runs in your own infra &nbsp;·&nbsp; Up in 15 minutes</p>
