@@ -2,8 +2,8 @@ import { getSupabaseClient } from '../../src/lib/supabase/client';
 import { sendDemoLeadEmails } from '../../src/lib/resend/client';
 
 const ALLOWED_LANGUAGES = [
-  'TypeScript', 'Python', 'Java', 'Node.js', 'Kotlin', 'PHP', 
-  'Scala', 'Go', 'Rust', 'C#', 'C++', 'Others'
+  'JavaScript', 'TypeScript', 'Java', 'Python', 'Ruby',
+  'Node.js', 'Kotlin', 'PHP', 'Scala', 'Go', 'Rust', 'C#', 'C++', 'Others'
 ];
 
 export const onRequestPost = async (context: {

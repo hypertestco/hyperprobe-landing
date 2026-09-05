@@ -6,8 +6,8 @@ export const config = {
 };
 
 const ALLOWED_LANGUAGES = [
-  'TypeScript', 'Python', 'Java', 'Node.js', 'Kotlin', 'PHP', 
-  'Scala', 'Go', 'Rust', 'C#', 'C++', 'Others'
+  'JavaScript', 'TypeScript', 'Java', 'Python', 'Ruby',
+  'Node.js', 'Kotlin', 'PHP', 'Scala', 'Go', 'Rust', 'C#', 'C++', 'Others'
 ];
 
 export default async function handler(request: Request) {
