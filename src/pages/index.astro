@@ -1189,6 +1189,10 @@ export const prerender = true;
 
   footer p { font-size: 12px; color: var(--muted); }
 
+  .footer-meta { display: flex; align-items: center; gap: 16px; }
+  .footer-meta a { color: var(--muted); font-size: 12px; text-decoration: none; transition: color 0.2s; }
+  .footer-meta a:hover { color: var(--text); }
+
   /* REVEAL */
   .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
@@ -1666,7 +1670,10 @@ export const prerender = true;
       <path d="M18.36 124.43L55.57 69.37L115.79 158.48L95.45 185.58L53.54 124.43H18.36Z" fill="currentColor"/>
     </svg>Hyper<span>Probe</span>
   </a>
-  <p>© 2026 HyperProbe · YC S26 · hyperprobe.co</p>
+  <div class="footer-meta">
+    <p>© 2026 HyperProbe · YC S26 · hyperprobe.co</p>
+    <a href="/privacy-policy">Privacy Policy</a>
+  </div>
   <div class="yc-badge"><div class="yc-mark">Y</div> Backed by Y Combinator</div>
 </footer>
 
