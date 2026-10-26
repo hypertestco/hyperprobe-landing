@@ -16,7 +16,7 @@ const {
 } = Astro.props;
 
 // Dynamically generate canonical URL based on configuration or Astro's request context
-const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://hyperprobe.io';
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://hyperprobe.co';
 const canonicalURL = new URL(Astro.url.pathname, siteUrl).toString();
 const absoluteImageUrl = new URL(image, siteUrl).toString();
 
